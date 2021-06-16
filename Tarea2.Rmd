@@ -1,0 +1,270 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+Funciones en R:
+
+Estructura de un función:
+
+En una función tenemos 3 tipos de elementos:
+1. Argumentos (o valores de entrada).
+2. Cuerpo: operaciones que han de realizarse. Se deben localizar entre corchetes «{}”.
+3. Resultado (o valores de salida): la última expresión que se ejecuta.
+
+Los argumentos se separan por una coma dentro de «función()”. Puede ser cualquier tipo y cantidad de argumentos. Los argumentos son los ingredientes que necesitas para que se ejecute la función. Los argumentos pueden tener un valor predeterminado, por ejemplo si escribimos argumento2=10:
+
+```{r}
+mifuncion <- function(<argumentos>)
+  {
+  #código de la función (function body)
+  #Result
+}
+```
+
+El cuerpo de la función contiene las operaciones que deseamos que se ejecuten sobre cada uno de los argumentos detallados anteriormente. Vienen dados entre corchetes «{}” y se ejecutan cada vez que llamamos la función.
+El resultado es el valor devuelto por la función que se genera en las operaciones que se han ejecutado en el cuerpo de la función. Puede ser cualquier tipo de datos.
+La última línea del código será el valor que devolverá la función.
+
+
+Ejemplos de Funciones.
+
+1: Función suma:
+
+```{r}
+sum<-function(x,y){
+     # suma de los elementos "x" e "y”
+     x+y
+ }
+
+sum (5,3)
+```
+
+2: Funciónn inverso: 
+
+```{r}
+inverso <- function(x) {
+  x <- 1 / x
+  return(x)
+}
+inverso(8)
+```
+3. Varias formas de obtener reseultados:
+
+3.1 Un único valor:
+```{r}
+
+hipotenusa<-function(cateto1, cateto2){
+    sqrt(cateto1^2+cateto2^2)
+     }
+
+hipotenusa(2,4)
+```
+
+3.2 Lista de Valores: Si queremos que en el resultado se muestren los valores iniciales y finales:
+```{r}
+hipotenusa <- function(cateto1, cateto2){
+ h<-sqrt(cateto1^2+cateto2^2)
+ list(cateto1=cateto1,cateto2=cateto2,hipotenusa=h)
+ }
+
+hipotenusa(2,4)
+
+cateto1
+
+cateto2
+
+hipotenusa
+
+```
+3.3 Con más de un valor para cada cateto: Si se quiere que el resultado tenga varios tipos de información (númerica o categórica), se puede utilizar una lista.
+
+```{r}
+hipotenusa(4:7,7:10)
+
+cateto1
+
+cateto2
+
+hipotenusa
+
+```
+
+Argumentos en una función.
+El argumento '...' (sin las comillas) permite pasar un número variable de argumetos a una función.
+
+Por ejemplo:
+
+```{r}
+inverso <- function(...) {
+  v <- unlist(list(...))  # Asigna los argumentos a un vector
+  x <- 1/v
+  return(x)
+  }
+inverso(10) # Se comporta como la función anterior
+
+inverso(8,11,587,12,-87) # Pero podemos poner un número variable de argumentos
+```
+
+otro ejemplo:
+
+```{r}
+sumar_pares <- function(...)
+{
+  valores <- c(...)
+  if(!is.numeric(valores)) return('NaN')
+ 
+  contador <- 0
+  for(n in valores){
+    if(n%%2 == 0){
+      contador <- contador + n
+    }
+  }
+contador
+}
+
+sumar_pares(10:15)
+```
+
+Argumentos, Retorno de Valores:
+
+Las funciones anteriores solamente realizan una serie de pasos y finalizan sin devolver ningun valor. En muchas ocasiones deseamos que las funciones al finalizar su ejecución devuelvan algún valor. Para esto tenemos dos posibilidades.
+
+La primea es hacer que la ultima linea de código evaluada dentro de una función sea el valor que queremos que sea devuelto.
+
+Ejemplo:
+
+```{r}
+## Función que cuenta la cantidad de vocales en una cadena que se pasa como argumento 
+
+contar_vocales <- function(frase) 
+{
+  cantidad_vocales <- 0 
+  frase <- tolower(frase)
+  frase <- strsplit(frase, "")[[1]]
+ 
+  for (i in frase)
+  {
+    if (i %in% c("a", "e", "i", "o", "u"))
+    {
+      cantidad_vocales <- cantidad_vocales + 1
+    } 
+  }
+  cantidad_vocales 
+}
+
+resultado <- contar_vocales("Esto es un ejemplo, de la tarea 2")
+resultado
+
+```
+La segunda alternativa es indicarlo explícitamente mediante el comando return(). En este ultimo caso, cuando se ejecuta esta instrucción dentro de una función, esta finaliza inmediatamente devolviendo el valor indicado. Lo común es reservar esta alternativa para devolver «señales» en caso de que la función tenga inconvenientes. Por ejemplo, en caso de que un argumento no sea consistente con lo esperado podemos devolver algún valor que nos indique de esta situación.
+
+Ejemplo:
+
+f <- function(<argumentos>) 
+{
+  if (<alguna_condición>) return(<señal>)
+  # Código de la función 
+  ...
+  x # objeto que devuelve la función 
+}
+
+```{r}
+# Ejemplo
+calcular_raiz2 <- function(n)
+{
+  # Verifica que el que número pasado no sea negativo
+  if (n < 0) return("Numero negativo")
+ 
+  # En caso de que los argumentos sean consistentes,
+  # continua con la ejecución de la función.
+  sqrt(n)
+}
+
+calcular_raiz2(25)
+
+calcular_raiz2(-3)
+```
+
+La familia apply:
+
+La familia de funciones apply es usada para aplicar una función a cada elemento de una estructura de datos. En particular, es usada para aplicar funciones en matrices, data frames, arrays y listas.
+
+Con esta familia de funciones podemos automatizar tareas complejas usando poca líneas de código y es una de las características distintivas de R como lenguaje de programación.
+
+La familia de funciones apply es una expresión de los rasgos del paradigma funcional de programación presentes en R.
+
+La familia de funciones apply no sólo recibe datos como argumentos, también recibe funciones.
+
+Todas las funciones de esta familia tienen una característica en común: reciben como argumentos a un objeto y al menos una función.
+
+
+Lapply:
+
+Esta función permite trabajar con vectores, listas o data frame. Se pueden aplicar operaciones por elementos las cuales son retornadas como una lista. Su estructura está dada por lapply(x, simplify=FALSE, FUN,...).
+
+simplify=FALSE <- Le indica a R que no retorne los valores como una lista.
+
+Ejemplos:
+
+```{r}
+x <- 1:4
+lapply(x, sqrt)
+
+```
+```{r}
+x <- list(a = 1:130, b = c(1,10,100,1000), c = seq(15,75,5))
+
+lapply(x, max)
+```
+
+Sapply()
+
+Esta función tiene un uso similar a la función lapply() ya que puede ser usada para data frame, vectores y listas pero se diferencia ya que esta imprime por consola un vector de valores y no una lista. La estructura está dada por sapply(x, FUN, ...)
+
+Ejemplos:
+
+```{r}
+sapply(x, mean)
+```
+```{r}
+sapply(1:4, sqrt)
+
+```
+
+usando Sapply para Iterar sobre un vector:
+
+```{r}
+sapply(1:10, function(i) i ^ 2)
+```
+usando Sapply para Iterar sobre una lista:
+
+```{r}
+Lista <- list(A = 1:5, B = 6:20, C = 1:3)
+
+sapply(Lista, mean)
+```
+
+
+Vapply:
+
+Devuelve un vector con la longitud que tiene cada una de las listas introducidas como parámetro.
+
+Ejemplo:
+
+```{r}
+x <- list(A = 1, B = 1:3, C = 1:7)
+
+vapply(x, FUN = length, FUN.VALUE = 0L)
+
+
+```
+
+```{r}
+z <- list(G = 1:10, H = 4:9, I = 1:7)
+
+vapply(z, FUN = max, FUN.VALUE = 0L)
+
+
+
+```
+
